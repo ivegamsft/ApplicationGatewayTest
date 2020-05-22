@@ -74,6 +74,17 @@ module "subnet" {
   address_prefixes     = var.subnet_address_space
 }
 
+module "pip" {
+  source = "./module/public_ip "
+
+  name = var.base_name
+  location = var.location
+  resource_group_name = module.rg.name
+  allocation_method = var.allocation_method
+
+  tags = var.tags
+}
+
 module "appgateway-subnet" {
   source = "./modules/subnet"
 
