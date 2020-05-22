@@ -6,8 +6,7 @@ variable "location" {
   type = string
 }
 
-variable "tags" {
-}
+variable "tags" {}
 
 resource "azurerm_resource_group" "rg" {
   name     = var.name

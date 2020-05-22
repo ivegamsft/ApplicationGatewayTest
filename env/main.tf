@@ -28,8 +28,7 @@ variable "base_name" {
 variable "location" {
   type = string
 }
-variable = "tags" {
-}
+variable "tags" {}
 
 # Networking variables pulled from ./variables.tfvars file
 variable "network_address_space" {
@@ -46,7 +45,7 @@ variable "ag_sku_name" {
 }
 variable "ag_sku_tier" {
   type = string
-} 
+}
 variable "ag_sku_capacity" {
   type = number
 }
@@ -96,10 +95,10 @@ module "appgateway_subnet" {
 module "pip" {
   source = "./module/public_ip "
 
-  name = var.base_name
-  location = var.location
+  name                = var.base_name
+  location            = var.location
   resource_group_name = module.rg.name
-  allocation_method = var.allocation_method
+  allocation_method   = var.allocation_method
 
   tags = var.tags
 }
@@ -108,16 +107,16 @@ module "pip" {
 module "app_gateway" {
   source = "./module/app-gateway"
 
-  name = var.base_name
-  location = var.location
+  name                = var.base_name
+  location            = var.location
   resource_group_name = module.rg.name
 
   tags = var.tags
 
   frontend_subnet_id = module.appgateway_subnet.id
-  sku_name = var.ag_sku_name
-  sku_tier = var.ag_sku_tier
-  sku_capacity = var.ag_sku_capacity
+  sku_name           = var.ag_sku_name
+  sku_tier           = var.ag_sku_tier
+  sku_capacity       = var.ag_sku_capacity
 
   pip_id = module.pip.id
 }
