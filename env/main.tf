@@ -105,7 +105,7 @@ module "pip" {
   tags = var.tags
 }
 
-# Applicaton Gateway
+# Application Gateway
 module "app_gateway" {
   source = "./module/app-gateway"
 

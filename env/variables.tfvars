@@ -13,7 +13,7 @@ network_address_space           = "10.0.0.0/8"
 vms_address_space               = "10.1.0.0/16"
 appgateway_subnet_address_space = "10.2.1.0/24"
 
-# Applicatoin Gateway Variables
+# Application Gateway Variables
 ag_sku_name     = "Standard_Small"
 ag_sku_tier     = "Standard"
 ag_sku_capacity = 2
