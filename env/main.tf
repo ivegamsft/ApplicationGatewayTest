@@ -93,7 +93,7 @@ module "appgateway_subnet" {
 
 ## Public IP
 module "pip" {
-  source = "./module/public_ip "
+  source = "./module/public_ip"
 
   name                = var.base_name
   location            = var.location
