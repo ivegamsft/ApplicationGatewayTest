@@ -52,7 +52,7 @@ variable "ag_sku_capacity" {
 
 # Base Resources
 module "rg" {
-  source = "./modules/resource-group"
+  source = "./module/resource-group"
 
   name     = var.base_name
   location = var.base_name
@@ -62,7 +62,7 @@ module "rg" {
 
 # Network Resources built from modules
 module "network" {
-  source = "./modules/vnet"
+  source = "./module/vnet"
 
   name                = "${var.base_name}-vnet"
   location            = var.location
@@ -74,7 +74,7 @@ module "network" {
 
 ## Subnets
 module "vms_subnet" {
-  source = "./modules/subnet"
+  source = "./module/subnet"
 
   name                 = "vms"
   resource_group_name  = module.rg.name
@@ -83,7 +83,7 @@ module "vms_subnet" {
 }
 
 module "appgateway_subnet" {
-  source = "./modules/subnet"
+  source = "./module/subnet"
 
   name                 = "appgateway"
   resource_group_name  = module.rg.name
