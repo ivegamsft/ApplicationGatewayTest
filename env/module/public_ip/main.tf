@@ -24,3 +24,8 @@ resource "azurerm_public_ip" "pip" {
 
   tags = var.tags
 }
+
+# Output
+output "id" {
+  value = azurerm_public_ip.pip.id
+}

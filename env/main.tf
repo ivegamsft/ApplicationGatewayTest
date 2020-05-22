@@ -36,11 +36,20 @@ variable = "tags" {
 variable "network_address_space" {
   type = string
 }
-variable "subnet_address_space" {
+variable "vms_address_space" {
   type = string
 }
 variable "appgateway_subnet_address_space" {
   type = string
+}
+variable "ag_sku_name" {
+  type = string
+}
+variable "ag_sku_tier" {
+  type = string
+} 
+variable "ag_sku_capacity" {
+  type = number
 }
 
 # Base Resources
@@ -65,15 +74,26 @@ module "network" {
   tags = var.tags
 }
 
-module "subnet" {
+## Subnets
+module "vms_subnet" {
   source = "./modules/subnet"
 
   name                 = "vms"
   resource_group_name  = module.rg.name
   virtual_network_name = module.network.name
-  address_prefixes     = var.subnet_address_space
+  address_prefixes     = var.vms_address_space
 }
 
+module "appgateway_subnet" {
+  source = "./modules/subnet"
+
+  name                 = "appgateway"
+  resource_group_name  = module.rg.name
+  virtual_network_name = module.network.name
+  address_prefixes     = var.appgateway_subnet_address_space
+}
+
+## Public IP
 module "pip" {
   source = "./module/public_ip "
 
@@ -85,11 +105,20 @@ module "pip" {
   tags = var.tags
 }
 
-module "appgateway-subnet" {
-  source = "./modules/subnet"
+# Applicaton Gateway
+module "app_gateway" {
+  source = "./module/app-gateway"
 
-  name                 = "appgateway"
-  resource_group_name  = module.rg.name
-  virtual_network_name = module.network.name
-  address_prefixes     = var.appgateway_subnet_address_space
+  name = var.base_name
+  location = var.location
+  resource_group_name = module.rg.name
+
+  tags = var.tags
+
+  frontend_subnet_id = module.appgateway_subnet.id
+  sku_name = var.ag_sku_name
+  sku_tier = var.ag_sku_tier
+  sku_capacity = var.ag_sku_capacity
+
+  pip_id = module.pip.id
 }
