@@ -29,7 +29,6 @@ variable "location" {
   type = string
 }
 variable = "tags" {
-  type = string
 }
 
 # Networking variables pulled from ./variables.tfvars file
