@@ -1,10 +1,21 @@
 # Base variables
-variable "name" {}
-variable "resource_group_name" {}
+variable "name" {
+   type = string
+}
+variable "resource_group_name" { 
+  type = string
+}
+variable "location" {
+  type = string
+}
 
 # Network variables
-variable "virtual_network_name" {}
-variable "address_prefixes" {}
+variable "virtual_network_name" {
+   type = string
+}
+variable "address_prefixes" {
+   type = string
+}
 
 # Module
 resource "azurerm_subnet" "subnet" {
@@ -19,3 +30,7 @@ resource "azurerm_subnet" "subnet" {
 output "id" {
   value = azurerm_subnet.subnet.id
 }
+
+
+
+

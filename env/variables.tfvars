@@ -1,22 +1,21 @@
 # Base Variables
-base_name = "appgatewaytest"
-location  = "westus2"
+base_name = "random"
+region  = "westus2"
 
 tags = {
-  owner       = "jogardn"
+  owner       = "me"
   environment = "demo"
-  client      = "customer"
 }
 
 # Networking Variables
-network_address_space           = "10.0.0.0/8"
-vms_address_space               = "10.1.0.0/16"
-appgateway_subnet_address_space = "10.2.1.0/24"
+vnet_address_space           = "10.100.0.0/20"
 
 # Application Gateway Variables
 ag_sku_name     = "Standard_Small"
 ag_sku_tier     = "Standard"
 ag_sku_capacity = 2
+ag_pip_allocation_method = "Dynamic"
 
-# Public IP Variables
-allocation_method = "Static"
+#VM info
+admin_username  = "azureuser"
+admin_password= "random"
