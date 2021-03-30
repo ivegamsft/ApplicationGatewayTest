@@ -49,7 +49,7 @@ variable "admin_password" {
 
 ## locals
 locals {
-  vm_base_name    = format("%s-apc", var.base_name)
+  vm_base_name    = format("%s-iis", var.base_name)
   vm_count        = var.vm_count
   data_disk_count = 1
   vm_publisher    = "MicrosoftWindowsServer"
@@ -84,15 +84,14 @@ resource "azurerm_managed_disk" "disks" {
   disk_size_gb         = 1024
 }
 
-resource "azurerm_linux_virtual_machine" "vms" {
-  count                           = local.vm_count
-  name                            = format("%s%d", local.vm_base_name, count.index)
-  resource_group_name             = var.resource_group.name
-  location                        = var.resource_group.region
-  size                            = var.vm_size
-  admin_username                  = var.admin_username
-  admin_password                  = var.admin_password
-  disable_password_authentication = false
+resource "azurerm_windows_virtual_machine" "vms" {
+  count               = local.vm_count
+  name                = format("%s%d", local.vm_base_name, count.index)
+  resource_group_name = var.resource_group.name
+  location            = var.resource_group.region
+  size                = var.vm_size
+  admin_username      = var.admin_username
+  admin_password      = var.admin_password
   network_interface_ids = [
     azurerm_network_interface.nics[count.index].id,
   ]
@@ -123,9 +122,9 @@ resource "azurerm_linux_virtual_machine" "vms" {
 # resource "azurerm_virtual_machine_extension" "vm_depagent" {
 #   count                      = local.vm_count
 #   name                       = format("%s%d-daext", local.vm_base_name, count.index)
-#   virtual_machine_id         = azurerm_linux_virtual_machine.vms[count.index].id
+#   virtual_machine_id         = azurerm_windows_virtual_machine.vms[count.index].id
 #   publisher                  = "Microsoft.Azure.Monitoring.DependencyAgent"
-#   type                       = "DependencyAgentLinux"
+#   type                       = "DependencyAgentWindows"
 #   type_handler_version       = "9.5"
 #   auto_upgrade_minor_version = true
 # }

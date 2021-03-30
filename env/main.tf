@@ -116,6 +116,7 @@ module "app_gateway_pip" {
   base_name         = format("%s-app-gw-pip", local.base_name)
   resource_group    = module.rg.resource_group
   allocation_method = var.ag_pip_allocation_method
+  sku               = "Basic"
   tags              = var.tags
 }
 

@@ -41,9 +41,9 @@ output "bastion_subnet" {
 ## locals
 locals {
   #Carve the subnets that are required for the network
-  app_gw_subnet_prefix  = cidrsubnet(var.vnet_address_space, 4, 15)
-  vm_subnet_prefix      = cidrsubnet(var.vnet_address_space, 4, 15)
-  bastion_subnet_prefix = cidrsubnet(var.vnet_address_space, 4, 15)
+  app_gw_subnet_prefix  = cidrsubnet(var.vnet_address_space, 3, 1)
+  vm_subnet_prefix      = cidrsubnet(var.vnet_address_space, 3, 0)
+  bastion_subnet_prefix = cidrsubnet(var.vnet_address_space, 4, 4)
 }
 
 ## Modules

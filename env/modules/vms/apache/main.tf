@@ -120,13 +120,13 @@ resource "azurerm_linux_virtual_machine" "vms" {
 #   caching            = "None"
 # }
 
-resource "azurerm_virtual_machine_extension" "vm_depagent" {
-  count                      = local.vm_count
-  name                       = format("%s%d-daext", local.vm_base_name, count.index)
-  virtual_machine_id         = azurerm_linux_virtual_machine.vms[count.index].id
-  publisher                  = "Microsoft.Azure.Monitoring.DependencyAgent"
-  type                       = "DependencyAgentLinux"
-  type_handler_version       = "9.5"
-  auto_upgrade_minor_version = true
-}
+# resource "azurerm_virtual_machine_extension" "vm_depagent" {
+#   count                      = local.vm_count
+#   name                       = format("%s%d-daext", local.vm_base_name, count.index)
+#   virtual_machine_id         = azurerm_linux_virtual_machine.vms[count.index].id
+#   publisher                  = "Microsoft.Azure.Monitoring.DependencyAgent"
+#   type                       = "DependencyAgentLinux"
+#   type_handler_version       = "9.5"
+#   auto_upgrade_minor_version = true
+# }
 
