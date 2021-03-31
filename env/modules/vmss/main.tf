@@ -18,10 +18,10 @@ variable "vm_size" {
   type        = string
   default     = "Standard_DS3_v2"
 }
-variable "vm_count" {
-  description = "VM Count"
+variable "instance_count" {
+  description = "VMSS Instance count"
   type        = number
-  default     = 1
+  default     = 2
 }
 
 variable "subnet_id" {
@@ -46,14 +46,6 @@ variable "admin_password" {
 }
 
 ## outputs
-output "vms" {
-  value = [
-    module.iis_vm.vm,
-    module.apache_vm.vm,
-    module.tomcat_vm.vm
-  ]
-}
-
 
 ## locals
 locals {
@@ -62,38 +54,23 @@ locals {
 ## resources
 
 ### VMS
-module "iis_vm" {
-  source           = "./iis/"
+module "windows_vmss" {
+  source           = "./windows/"
   resource_group   = var.resource_group
   subnet_id        = var.subnet_id
   base_name        = var.base_name
   diag_stg_acct_id = var.diag_stg_acct_id
   vm_size          = var.vm_size
-  vm_count         = var.vm_count
+  instance_count = var.instance_count
   admin_username   = var.admin_username
   admin_password   = var.admin_password
 }
 
-module "apache_vm" {
-  source           = "./apache/"
-  resource_group   = var.resource_group
-  subnet_id        = var.subnet_id
-  base_name        = var.base_name
-  diag_stg_acct_id = var.diag_stg_acct_id
-  vm_size          = var.vm_size
-  vm_count         = var.vm_count
-  admin_username   = var.admin_username
-  admin_password   = var.admin_password
-}
-
-module "tomcat_vm" {
-  source           = "./tomcat/"
-  resource_group   = var.resource_group
-  subnet_id        = var.subnet_id
-  base_name        = var.base_name
-  diag_stg_acct_id = var.diag_stg_acct_id
-  vm_size          = var.vm_size
-  vm_count         = var.vm_count
-  admin_username   = var.admin_username
-  admin_password   = var.admin_password
-}
+# module "linux_vmss" {
+#   source           = "./linux/"
+#   resource_group   = var.resource_group
+#   subnet_id        = var.subnet_id
+#   base_name        = var.base_name
+#   diag_stg_acct_id = var.diag_stg_acct_id
+#   vm_size          = var.vm_size
+# }

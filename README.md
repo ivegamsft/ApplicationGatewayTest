@@ -4,13 +4,38 @@ Testing Azure Application Gateway Routing
 
 ## Deploy TF infra and servers
 
-TODO:: ADD STEPS HERE
+1. Pull the repo locally
+1. Open the `variables.tfvars` and modify if needed.
+1. Login to the Azure CLI
+1. Run Terraform Plan
+
+```bash
+   terraform plan -var-file 'variables.tfvars'
+```
+
+1. Run Terraform
+
+```bash
+   terraform apply -var-file 'variables.tfvars' -auto-approve  
+```
+
+1. The password for the VM's is auto generated and exported after the apply
+
+   > Apply complete! Resources: XX added, XX changed, XX destroyed.
+   >
+   > Outputs:
+   > generated_password = "COMPLEX RANDOM PASSWORD"
+
+1. To destroy, run
+
+```bash
+   terraform destroy -var-file 'variables.tfvars' -auto-approve
+```
 
 ## Set up backend web servers
 
 ### Create apache machine
 
-1. Create REHL VM
 1. SSH to the Apache VM and install Apache
 
    ```bash

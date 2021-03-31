@@ -46,6 +46,9 @@ variable "admin_password" {
 }
 
 ## outputs
+output "vm" {
+  value = azurerm_windows_virtual_machine.vms
+}
 
 ## locals
 locals {

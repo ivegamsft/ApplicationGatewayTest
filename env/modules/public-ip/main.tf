@@ -29,7 +29,7 @@ variable "sku" {
 
 # Module
 resource "azurerm_public_ip" "pip" {
-  name                = "${var.base_name}-pip"
+  name                = var.base_name
   location            = var.resource_group.region
   resource_group_name = var.resource_group.name
   allocation_method   = var.allocation_method

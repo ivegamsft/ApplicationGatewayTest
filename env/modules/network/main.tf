@@ -34,16 +34,20 @@ output "app_gw_subnet" {
 output "vm_subnet" {
   value = azurerm_subnet.vm_subnet
 }
+output "vmss_subnet" {
+  value = azurerm_subnet.vmss_subnet
+}
 output "bastion_subnet" {
   value = azurerm_subnet.bastion_subnet
 }
 
 ## locals
 locals {
-  #Carve the subnets that are required for the network
-  app_gw_subnet_prefix  = cidrsubnet(var.vnet_address_space, 3, 1)
-  vm_subnet_prefix      = cidrsubnet(var.vnet_address_space, 3, 0)
-  bastion_subnet_prefix = cidrsubnet(var.vnet_address_space, 4, 4)
+  #Carve the subnets that are required for the network (Assumes a /20 or above)
+  app_gw_subnet_prefix  = cidrsubnet(var.vnet_address_space, 4, 0)
+  vm_subnet_prefix      = cidrsubnet(var.vnet_address_space, 4, 1)
+  vmss_subnet_prefix    = cidrsubnet(var.vnet_address_space, 4, 2)
+  bastion_subnet_prefix = cidrsubnet(var.vnet_address_space, 4, 3)
 }
 
 ## Modules
@@ -68,6 +72,13 @@ resource "azurerm_subnet" "vm_subnet" {
   address_prefixes     = [local.vm_subnet_prefix]
 }
 
+resource "azurerm_subnet" "vmss_subnet" {
+  name                 = format("%s-vmss-subnet", var.base_name)
+  resource_group_name  = var.resource_group.name
+  virtual_network_name = azurerm_virtual_network.vnet.name
+  address_prefixes     = [local.vmss_subnet_prefix]
+}
+
 resource "azurerm_subnet" "bastion_subnet" {
   name                 = "AzureBastionSubnet"
   resource_group_name  = var.resource_group.name
@@ -75,7 +86,7 @@ resource "azurerm_subnet" "bastion_subnet" {
   address_prefixes     = [local.bastion_subnet_prefix]
 }
 
-### Netapp BH
+### BH
 resource "azurerm_public_ip" "bh_pip" {
   name                = format("%s-bh-pip", var.base_name)
   resource_group_name = var.resource_group.name

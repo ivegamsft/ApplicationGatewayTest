@@ -37,15 +37,21 @@ variable "admin_password" {
   type    = string
   default = "random"
 }
+variable "ag_pip_sku" {
+  type    = string
+  default = "Standard"
+}
 variable "ag_pip_allocation_method" {
   type    = string
-  default = "Dynamic"
+  default = "Static"
 }
 variable "ag_sku_name" {
-  type = string
+  type    = string
+  default = "Standard_v2"
 }
 variable "ag_sku_tier" {
-  type = string
+  type    = string
+  default = "Standard_v2"
 }
 variable "ag_sku_capacity" {
   type = number
@@ -107,7 +113,17 @@ module "vms" {
   diag_stg_acct_id = module.vm_stg.diag_stg.id
   admin_username   = var.admin_username
   admin_password   = local.admin_password
+}
 
+module "vmss" {
+  source           = "./modules/vmss/"
+  base_name        = local.base_name
+  resource_group   = module.rg.resource_group
+  subnet_id        = module.network.vmss_subnet.id
+  instance_count   = 2
+  diag_stg_acct_id = module.vm_stg.diag_stg.id
+  admin_username   = var.admin_username
+  admin_password   = local.admin_password
 }
 
 ## Public IP
@@ -116,19 +132,26 @@ module "app_gateway_pip" {
   base_name         = format("%s-app-gw-pip", local.base_name)
   resource_group    = module.rg.resource_group
   allocation_method = var.ag_pip_allocation_method
-  sku               = "Basic"
+  sku               = var.ag_pip_sku
   tags              = var.tags
 }
 
 # Application Gateway
 module "app_gateway" {
-  source             = "./modules/app-gateway/"
-  base_name          = local.base_name
-  resource_group     = module.rg.resource_group
-  tags               = var.tags
-  frontend_subnet_id = module.network.app_gw_subnet.id
-  sku_name           = var.ag_sku_name
-  sku_tier           = var.ag_sku_tier
-  sku_capacity       = var.ag_sku_capacity
-  pip_id             = module.app_gateway_pip.id
+  source            = "./modules/app-gateway/"
+  base_name         = local.base_name
+  resource_group    = module.rg.resource_group
+  tags              = var.tags
+  backend_subnet_id = module.network.app_gw_subnet.id
+  sku_name          = var.ag_sku_name
+  sku_tier          = var.ag_sku_tier
+  sku_capacity      = var.ag_sku_capacity
+  pip_id            = module.app_gateway_pip.id
 }
+
+#Add Bindings
+# resource "azurerm_network_interface_application_gateway_backend_address_pool_association" "win_binding" {
+#   network_interface_id    = var.be_nic_ids[count.index]
+#   ip_configuration_name   = var.be_nic_ip_configuration_name
+#   backend_address_pool_id = azurerm_application_gateway.ag[0].backend_address_pool[0].id
+# }
